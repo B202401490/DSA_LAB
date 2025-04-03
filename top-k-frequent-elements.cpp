@@ -1,15 +1,26 @@
-int firstUniqChar(string s) {
-        int freq[26] = {0};
-
-        for (char c : s) {
-            freq[c - 'a']++;
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> freqMap;
+        for (int num : nums) {
+            freqMap[num]++;
         }
 
-        for (int i = 0; i < s.size(); i++) {
-            if (freq[s[i] - 'a'] == 1) {
-                return i;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> minHeap;
+
+        for (auto& [num, freq] : freqMap) {
+            minHeap.push({freq, num});
+            if (minHeap.size() > k) {
+                minHeap.pop();
             }
         }
 
-        return -1;
-    }
+        vector<int> result;
+        while (!minHeap.empty()) {
+            result.push_back(minHeap.top().second);
+            minHeap.pop();
+        }
+        
+        return result;
+    }
+};
